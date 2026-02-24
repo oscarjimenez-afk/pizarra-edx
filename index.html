@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pizarra colaborativa</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        textarea, input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            font-size: 14px;
+            background-color: #2a7ae2;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1f5fbf;
+        }
+        .respuesta {
+            background-color: white;
+            padding: 10px;
+            margin-top: 10px;
+            border-left: 4px solid #2a7ae2;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Pregunta</h2>
+    <p id="pregunta">¿Cuál es el principal riesgo toxicológico del consumo excesivo de este compuesto?</p>
+
+    <h3>Escribe tu respuesta</h3>
+    <textarea id="respuesta" rows="4" placeholder="Escribe aquí tu respuesta..."></textarea>
+    <button onclick="guardarRespuesta()">Enviar respuesta</button>
+
+    <h3>Respuestas del grupo</h3>
+    <div id="respuestas"></div>
+
+    <script>
+        const clave = "respuestas_pizarra";
+
+        function cargarRespuestas() {
+            const contenedor = document.getElementById("respuestas");
+            contenedor.innerHTML = "";
+
+            const respuestas = JSON.parse(localStorage.getItem(clave)) || [];
+
+            respuestas.forEach(r => {
+                const div = document.createElement("div");
+                div.className = "respuesta";
+                div.textContent = r;
+                contenedor.appendChild(div);
+            });
+        }
+
+        function guardarRespuesta() {
+            const texto = document.getElementById("respuesta").value.trim();
+            if (texto === "") return;
+
+            const respuestas = JSON.parse(localStorage.getItem(clave)) || [];
+            respuestas.push(texto);
+
+            localStorage.setItem(clave, JSON.stringify(respuestas));
+            document.getElementById("respuesta").value = "";
+            cargarRespuestas();
+        }
+
+        cargarRespuestas();
+    </script>
+
+</body>
+</html>
